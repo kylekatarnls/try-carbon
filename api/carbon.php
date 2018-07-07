@@ -17,13 +17,15 @@ function exception_error_handler($severity, $message, $file, $line) {
 }
 set_error_handler("exception_error_handler");
 
-if (!file_exists(__DIR__ . '/../var/engines/carbon/' . $_POST['version'] . '/vendor/autoload.php')) {
+$autoload = __DIR__ . '/../var/engines/carbon/' . $_POST['version'] . '/vendor/autoload.php';
+
+if (!file_exists($autoload)) {
     echo 'Update in progress, please retry in few minutes.';
     exit;
 }
 
 include_once __DIR__ . '/../allow-csrf.php';
-require_once __DIR__ . '/../var/engines/carbon/' . $_POST['version'] . '/vendor/autoload.php';
+require_once $autoload;
 
 try {
     eval('use Carbon\Carbon;' . $_POST['input']);
