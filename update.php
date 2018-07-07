@@ -1,0 +1,93 @@
+<?php
+
+set_time_limit(0);
+
+function needDirectory($directory) {
+    if (!file_exists($directory)) {
+        return mkdir($directory, 0777, true);
+    }
+    
+    return false;
+}
+
+$enginesDirectory = __DIR__ . '/var/engines';
+needDirectory($enginesDirectory);
+$cacheDirectory = __DIR__ . '/var/cache';
+needDirectory($cacheDirectory);
+
+$gitHost = 'https://github.com/';
+$apiHost = 'https://api.github.com/';
+$apiContext = stream_context_create([
+    'http' => [
+        'method' => 'GET',
+        'header' => [
+            'User-Agent: PHP',
+        ],
+    ],
+]);
+
+$enginesRepositories = [
+    'carbon' => 'briannesbitt/Carbon',
+];
+
+foreach ($enginesRepositories as $repository => $url) {
+    $optionsHtml = '';
+    $directory = $enginesDirectory . DIRECTORY_SEPARATOR . $repository;
+    needDirectory($directory);
+    $versionCache = $cacheDirectory . DIRECTORY_SEPARATOR . $repository . '-tags.json';
+    $versionFile = $versionCache;
+    if (!file_exists($versionCache) || time() - filemtime($versionCache) > 3600) {
+        $list = array();
+        for ($i = 1; true; $i++) {
+            $items = @json_decode(file_get_contents(
+                $apiHost . 'repos/' . $url . '/tags?page=' . $i,
+                false,
+                $apiContext
+            ));
+            if (!is_array($items)) {
+                $items = @json_decode(file_get_contents(
+                    __DIR__ . '/fallback/' . $repository . '-tags.json'
+                ));
+            }
+            $list = array_merge($list, $items);
+            if (count($items) < 30) {
+                break;
+            }
+        }
+        file_put_contents($versionCache, json_encode($list));
+    }
+    $touched = false;
+    $tags = json_decode(file_get_contents($versionCache));
+    usort($tags, function ($a, $b) {
+        return version_compare($b->name, $a->name);
+    });
+    array_unshift($tags, (object) [
+       'name' => '2.x-dev',
+    ]);
+    $minorTags = [];
+    foreach ($tags as $tag) {
+        list($major, $minor, $patch) = explode('.', $tag->name . '..');
+        $minorTag = "$major.$minor";
+        $minorTags[$minorTag] = $tag;
+    }
+    foreach ($minorTags as $tag) {
+        echo "Load $url {$tag->name}\n";
+        $optionsHtml .= '<option value="' . $tag->name . '">' . $tag->name . '</option>';
+        $versionDirectory = $directory . DIRECTORY_SEPARATOR . $tag->name;
+        if (needDirectory($versionDirectory)) {
+            $touched = true;
+            chdir($versionDirectory);
+            echo shell_exec('git clone ' . $gitHost . $url . ' .');
+            $branch = $tag->name === '2.x-dev' ? 'version-2.0' : 'tags/' . $tag->name;
+            echo shell_exec('git checkout ' . $branch);
+            shell_exec('rm -rf tests');
+            echo shell_exec('composer update --no-dev &');
+        } elseif ($tag->name === '2.x-dev') {
+            chdir($versionDirectory);
+            echo shell_exec('git pull origin version-2.0');
+        }
+    }
+    if ($touched) {
+        file_put_contents($cacheDirectory . DIRECTORY_SEPARATOR . $repository . '-versions-options.html', $optionsHtml);
+    }
+}

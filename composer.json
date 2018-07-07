@@ -1,0 +1,11 @@
+{
+    "require": {
+        "php": ">=5.4"
+    },
+    "scripts": {
+        "post-autoload-dump": "php update.php"
+    },
+    "config": {
+        "process-timout": 10800
+    }
+}
