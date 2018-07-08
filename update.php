@@ -82,7 +82,7 @@ foreach ($enginesRepositories as $repository => $url) {
             $branch = $tag->name === '2.x-dev' ? 'version-2.0' : 'tags/' . $tag->name;
             echo shell_exec('git checkout ' . $branch);
             shell_exec('rm -rf tests');
-            echo shell_exec('composer update --no-dev &');
+            echo shell_exec('composer install --optimize-autoloader --no-dev &');
         } elseif ($tag->name === '2.x-dev') {
             chdir($versionDirectory);
             echo shell_exec('git pull origin version-2.0');
