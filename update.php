@@ -74,9 +74,10 @@ foreach ($enginesRepositories as $repository => $url) {
         echo "Load $url {$tag->name}\n";
         $optionsHtml .= '<option value="' . $tag->name . '">' . $tag->name . '</option>';
         $versionDirectory = $directory . DIRECTORY_SEPARATOR . $tag->name;
-        if (needDirectory($versionDirectory)) {
+        if (needDirectory($versionDirectory) || !file_exists($versionDirectory . '/vendor/autoload.php')) {
             $touched = true;
             chdir($versionDirectory);
+            shell_exec('rm -rf ./*');
             echo shell_exec('git clone ' . $gitHost . $url . ' .');
             $branch = $tag->name === '2.x-dev' ? 'version-2.0' : 'tags/' . $tag->name;
             echo shell_exec('git checkout ' . $branch);
