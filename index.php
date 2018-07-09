@@ -343,6 +343,7 @@ if (!isset($_GET['embed'])) { ?>2 months ago<?php } ?></div>
         if (readonly) {
             editor.setReadOnly(true);
         }
+        editor.$blockScrolling = Infinity;
 
         return editor;
     }
