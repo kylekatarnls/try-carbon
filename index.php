@@ -5,6 +5,8 @@ $engine = isset($_GET['engine']) ? $_GET['engine'] : 'carbon';
 $inline = isset($_GET['inline']) ? boolval(intval($_GET['inline'])) : true;
 $inputLanguage = isset($_GET['language']) ? $_GET['language'] : 'php';
 $hasOptions = isset($_GET['options']);
+$border = isset($_GET['border']) ? $_GET['border'] : '#232323';
+$radius = isset($_GET['radius']) ? $_GET['radius'] : '2';
 $options = $hasOptions ? @json_decode($_GET['options']) : (object) [];
 
 function getOption($option, $default = null) {
@@ -48,7 +50,7 @@ include_once __DIR__ . '/allow-csrf.php';
         border: 1px solid #232323;
         background: #454545;
         color: #c9c9c9;
-        border-radius: 2px;
+        border-radius: <?php echo $radius; ?>px;
     }
     aside {
         float: right;
@@ -76,8 +78,8 @@ include_once __DIR__ . '/allow-csrf.php';
     #input,
     #output,
     #preview {
-        border-radius: 2px;
-        border: 1px solid <?php echo isset($_GET['border']) ? $_GET['border'] : '#232323'; ?>;
+        border-radius: <?php echo $radius; ?>px;
+        border: <?php echo $border === 'none' ? 'none' : "1px solid $border"; ?>;
         box-sizing: border-box;
     }
     #input {
