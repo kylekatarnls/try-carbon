@@ -349,6 +349,16 @@ if (!isset($_GET['embed'])) { ?>2 months ago<?php } ?></div>
 
     var output = editor('output', 'ace/mode/html', true);
 
+    if (parent) {
+        window.onload = function () {
+            parent.postMessage(JSON.stringify({
+                sender: 'try-carbon',
+                token: (location.search.match(/[?&]token=([^&]+)/) || [])[1],
+                event: 'ready',
+            }), '*');
+        };
+    }
+
     input.getSession().on('change', evaluateCode);
 
     var dragAndDrop = {h: null};
