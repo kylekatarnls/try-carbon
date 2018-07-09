@@ -7,6 +7,8 @@ $inputLanguage = isset($_GET['language']) ? $_GET['language'] : 'php';
 $hasOptions = isset($_GET['options']);
 $border = isset($_GET['border']) ? $_GET['border'] : '#232323';
 $radius = isset($_GET['radius']) ? $_GET['radius'] : '2';
+$vPadding = isset($_GET['v-padding']) ? $_GET['v-padding'] : 0;
+$hPadding = isset($_GET['h-padding']) ? $_GET['h-padding'] : 0;
 $options = $hasOptions ? @json_decode($_GET['options']) : (object) [];
 
 function getOption($option, $default = null) {
@@ -143,6 +145,10 @@ include_once __DIR__ . '/allow-csrf.php';
         left: calc(<?php echo $leftWidth; ?>% - 7px);
         width: 14px;
         cursor: col-resize;
+    }
+    .ace_scroller,
+    .ace_gutter {
+        padding: <?php echo $vPadding; ?>px <?php echo $hPadding; ?>px;
     }
     <?php if (isset($_GET['hide-output'])) { ?>
         #output {
