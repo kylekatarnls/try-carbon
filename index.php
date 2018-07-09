@@ -1,5 +1,6 @@
 <?php
-$width = isset($_GET['width']) ? $_GET['width'] : 70;
+$leftWidth = isset($_GET['width']) ? $_GET['width'] : 70;
+$rightWidth = 100 - $leftWidth;
 $engine = isset($_GET['engine']) ? $_GET['engine'] : 'carbon';
 $inline = isset($_GET['inline']) ? boolval(intval($_GET['inline'])) : true;
 $inputLanguage = isset($_GET['language']) ? $_GET['language'] : 'php';
@@ -81,12 +82,12 @@ include_once __DIR__ . '/allow-csrf.php';
     }
     #input {
         left: 20px;
-        right: calc(<?php echo $width; ?>% + 10px);
+        right: calc(<?php echo $rightWidth; ?>% + 10px);
     }
     #options {
         bottom: auto;
         height: 0;
-        right: calc(<?php echo 100 - $width; ?>% + 10px);
+        right: calc(<?php echo $leftWidth; ?>% + 10px);
         overflow: visible;
         z-index: 8;
         display: none;
@@ -124,7 +125,7 @@ include_once __DIR__ . '/allow-csrf.php';
     #preview,
     #output {
         right: 20px;
-        left: calc(<?php echo $width; ?>% + 10px);
+        left: calc(<?php echo $leftWidth; ?>% + 10px);
     }
     #preview {
         display: none;
@@ -137,7 +138,7 @@ include_once __DIR__ . '/allow-csrf.php';
         overflow: auto;
     }
     #h-resize {
-        left: calc(<?php echo $width; ?>% - 7px);
+        left: calc(<?php echo $leftWidth; ?>% - 7px);
         width: 14px;
         cursor: col-resize;
     }
@@ -159,7 +160,7 @@ include_once __DIR__ . '/allow-csrf.php';
             top: 0;
             height: 100%;
             left: 0;
-            right: calc(<?php echo $width; ?>% + 7px);
+            right: calc(<?php echo $rightWidth; ?>% + 7px);
         }
         #h-resize {
             top: 0;
@@ -170,7 +171,7 @@ include_once __DIR__ . '/allow-csrf.php';
             top: 0;
             bottom: 0;
             right: 0;
-            left: calc(<?php echo 100 - $width; ?>% + 7px);
+            left: calc(<?php echo $leftWidth; ?>% + 7px);
         }
         #right-buttons a,
         #options a {
@@ -181,7 +182,7 @@ include_once __DIR__ . '/allow-csrf.php';
             display: block;
             top: 0;
             height: 0;
-            right: calc(<?php echo $width; ?>% + 7px);
+            right: calc(<?php echo $rightWidth; ?>% + 7px);
         }
     <?php } ?>
 </style>
