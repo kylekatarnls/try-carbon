@@ -70,7 +70,7 @@ include_once __DIR__ . '/allow-csrf.php';
         color: gray;
     }
     <?php if ($outputLeftPadding) { ?>
-        .ace_content {
+        #output .ace_line {
             padding-left: <?php echo $outputLeftPadding; ?>px;
         }
     <?php } ?>
