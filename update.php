@@ -79,13 +79,13 @@ foreach ($enginesRepositories as $repository => $url) {
             chdir($versionDirectory);
             shell_exec('rm -rf ./*');
             echo shell_exec('git clone ' . $gitHost . $url . ' .');
-            $branch = $tag->name === '2.x-dev' ? 'version-2.0' : 'tags/' . $tag->name;
+            $branch = $tag->name === '2.x-dev' ? 'master' : 'tags/' . $tag->name;
             echo shell_exec('git checkout ' . $branch);
             shell_exec('rm -rf tests');
             echo shell_exec('composer install --optimize-autoloader --no-dev --ignore-platform-reqs &');
         } elseif ($tag->name === '2.x-dev') {
             chdir($versionDirectory);
-            echo shell_exec('git pull origin version-2.0');
+            echo shell_exec('git pull origin master');
         }
     }
     if ($touched) {
