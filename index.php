@@ -372,6 +372,18 @@ if (!isset($_GET['embed'])) { ?>2 months ago<?php } ?></div>
 
     var langTools = ace.require('ace/ext/language_tools');
     var input = editor('input', 'ace/mode/<?php echo $inputLanguage; ?>');
+    input.getSelection().on('changeSelection', function () {
+        var selection = input.getSelectedText();
+
+        if (selection) {
+            parent.postMessage(JSON.stringify({
+                sender: 'try-carbon',
+                token: (location.search.match(/[?&]token=([^&]+)/) || [])[1],
+                event: 'selection',
+                selection: selection,
+            }), '*');
+        }
+    });
     input.setOptions({
         enableBasicAutocompletion: true,
     });
