@@ -356,7 +356,15 @@ if (!isset($_GET['embed'])) { ?>2 months ago<?php } ?></div>
 
     var input = editor('input', 'ace/mode/<?php echo $inputLanguage; ?>');
 
+    if (/[&?]hide-input-gutter&/.test(location.search + '&')) {
+        input.renderer.setShowGutter(false);
+    }
+
     var output = editor('output', 'ace/mode/html', true);
+
+    if (/[&?]hide-output-gutter&/.test(location.search + '&')) {
+        output.renderer.setShowGutter(false);
+    }
 
     if (parent) {
         window.onload = function () {
