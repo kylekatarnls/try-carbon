@@ -152,9 +152,11 @@ include_once __DIR__ . '/allow-csrf.php';
         width: 14px;
         cursor: col-resize;
     }
-    .ace_scroller,
     .ace_gutter {
         padding: <?php echo $vPadding; ?>px <?php echo $hPadding; ?>px;
+    }
+    #input .ace_scroller, #output .ace_scroller {
+        top: <?php echo $vPadding; ?>px;
     }
     <?php if (isset($_GET['hide-output'])) { ?>
         #output {
