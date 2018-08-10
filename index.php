@@ -9,6 +9,7 @@ $border = isset($_GET['border']) ? $_GET['border'] : '#232323';
 $radius = isset($_GET['radius']) ? $_GET['radius'] : '2';
 $vPadding = isset($_GET['v-padding']) ? $_GET['v-padding'] : 0;
 $hPadding = isset($_GET['h-padding']) ? $_GET['h-padding'] : 0;
+$outputLeftPadding = isset($_GET['output-left-padding']) ? $_GET['output-left-padding'] : 0;
 $options = $hasOptions ? @json_decode($_GET['options']) : (object) [];
 
 function getOption($option, $default = null) {
@@ -68,6 +69,11 @@ include_once __DIR__ . '/allow-csrf.php';
     sup {
         color: gray;
     }
+    <?php if ($outputLeftPadding) { ?>
+        .ace_content {
+            padding-left: <?php echo $outputLeftPadding; ?>px;
+        }
+    <?php } ?>
     #h-resize,
     #input,
     #output,
