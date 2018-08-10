@@ -318,6 +318,13 @@ if (!isset($_GET['embed'])) { ?>2 months ago<?php } ?></div>
 
         lastInput = input.getValue() + '';
 
+        parent.postMessage(JSON.stringify({
+            sender: 'try-carbon',
+            token: (location.search.match(/[?&]token=([^&]+)/) || [])[1],
+            event: 'input',
+            input: lastInput,
+        }), '*');
+
         xhr.open('POST', '/api/carbon.php', true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(
@@ -1168,7 +1175,6 @@ if (!isset($_GET['embed'])) { ?>2 months ago<?php } ?></div>
                 'Carbon\\Carbon::getRelativeTest',
             ];
 
-            console.log(prefix);
             callback(null, methods.map(function (method) {
                 method = method.split('::');
 
