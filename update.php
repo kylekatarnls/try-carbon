@@ -38,17 +38,16 @@ foreach ($enginesRepositories as $repository => $url) {
     needDirectory($directory);
     $versionCache = $cacheDirectory . DIRECTORY_SEPARATOR . $repository . '-tags.json';
     $versionFile = $versionCache;
-    echo date('Y-m-d H:i:s')."\n".date('Y-m-d H:i:s', filemtime($versionCache))."\n".(time() - filemtime($versionCache))."\n";
     if (!file_exists($versionCache) || time() - filemtime($versionCache) > 3600) {
         $list = array();
         for ($i = 1; true; $i++) {
-            $items = @json_decode(file_get_contents(
+            $items = json_decode(file_get_contents(
                 $apiHost . 'repos/' . $url . '/tags?page=' . $i,
                 false,
                 $apiContext
             ));
             if (!is_array($items)) {
-                $items = @json_decode(file_get_contents(
+                $items = json_decode(file_get_contents(
                     __DIR__ . '/fallback/' . $repository . '-tags.json'
                 ));
             }
