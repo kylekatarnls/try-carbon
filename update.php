@@ -30,12 +30,15 @@ $enginesRepositories = [
     'carbon' => 'briannesbitt/Carbon',
 ];
 
+header('Content-type: text/plain; charset=UTF-8');
+
 foreach ($enginesRepositories as $repository => $url) {
     $optionsHtml = '';
     $directory = $enginesDirectory . DIRECTORY_SEPARATOR . $repository;
     needDirectory($directory);
     $versionCache = $cacheDirectory . DIRECTORY_SEPARATOR . $repository . '-tags.json';
     $versionFile = $versionCache;
+    echo date('Y-m-d H:i:s')."\n".date('Y-m-d H:i:s', filemtime($versionCache))."\n".(time() - filemtime($versionCache))."\n";
     if (!file_exists($versionCache) || time() - filemtime($versionCache) > 3600) {
         $list = array();
         for ($i = 1; true; $i++) {
