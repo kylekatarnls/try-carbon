@@ -38,7 +38,7 @@ foreach ($enginesRepositories as $repository => $url) {
     needDirectory($directory);
     $versionCache = $cacheDirectory . DIRECTORY_SEPARATOR . $repository . '-tags.json';
     $versionFile = $versionCache;
-    if (!file_exists($versionCache) || time() - filemtime($versionCache) > 0) {
+    if (!file_exists($versionCache) || time() - filemtime($versionCache) > 3600) {
         $list = array();
         for ($i = 1; true; $i++) {
             $items = json_decode(file_get_contents(
@@ -46,7 +46,6 @@ foreach ($enginesRepositories as $repository => $url) {
                 false,
                 $apiContext
             ));
-            echo json_encode($items, JSON_PRETTY_PRINT)."\n";
             if (!is_array($items)) {
                 $items = json_decode(file_get_contents(
                     __DIR__ . '/fallback/' . $repository . '-tags.json'
@@ -71,7 +70,9 @@ foreach ($enginesRepositories as $repository => $url) {
     foreach ($tags as $tag) {
         list($major, $minor, $patch) = explode('.', $tag->name . '..');
         $minorTag = "$major.$minor";
-        $minorTags[$minorTag] = $tag;
+        if (!isset($minorTags[$minorTag])) {
+            $minorTags[$minorTag] = $tag;
+        }
     }
     foreach ($minorTags as $tag) {
         echo "Load $url {$tag->name}\n";
