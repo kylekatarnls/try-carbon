@@ -28,7 +28,7 @@ include_once __DIR__ . '/../allow-csrf.php';
 require_once $autoload;
 
 try {
-    eval('use Carbon\Carbon; use Carbon\CarbonInterval; use Carbon\CarbonInterface; use Carbon\CarbonImmutable; use Carbon\CarbonPeriod; use Carbon\CarbonTimeZone; use Carbon\Translator;' . $_POST['input']);
+    eval('use Carbon\Carbon; use Carbon\CarbonInterval; use Carbon\CarbonInterface; use Carbon\CarbonImmutable; use Carbon\CarbonPeriod; use Carbon\CarbonTimeZone; use Carbon\Translator; use Carbon\Factory; use Carbon\FactoryImmutable;' . $_POST['input']);
 } catch (\Throwable $e) {
     $message = trim($e->getMessage());
     echo 'Error' . (substr($message, 0, 1) === '('
