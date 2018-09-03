@@ -235,12 +235,12 @@ include_once __DIR__ . '/allow-csrf.php';
     </div>
 </div>
 
-<div id="input"><?php if (isset($_GET['embed'])) {
-    echo isset($_GET['input']) ? $_GET['input'] : '';
+<div id="input"><?php if (isset($_GET['input'])) {
+    echo $_GET['input'];
 } else { ?>echo Carbon::now()->subMonths(2)->diffForHumans();<?php } ?></div>
 
 <div id="output"><?php
-if (!isset($_GET['embed'])) { ?>2 months ago<?php } ?></div>
+if (!isset($_GET['input'])) { ?>2 months ago<?php } ?></div>
 <div id="h-resize"></div>
 <div id="preview"></div>
 
@@ -1283,7 +1283,7 @@ if (!isset($_GET['embed'])) { ?>2 months ago<?php } ?></div>
     };
 
     <?php
-    if (isset($_GET['embed']) || $hasOptions) {
+    if (isset($_GET['embed']) || isset($_GET['input']) || $hasOptions) {
         echo 'evaluateCode()';
     }
     ?>
