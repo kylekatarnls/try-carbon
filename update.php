@@ -64,7 +64,7 @@ foreach ($enginesRepositories as $repository => $url) {
         return version_compare($b->name, $a->name);
     });
     array_unshift($tags, (object) [
-       'name' => '2.x-dev',
+       'name' => 'master (next version)',
     ]);
     $minorTags = [];
     foreach ($tags as $tag) {
@@ -78,16 +78,17 @@ foreach ($enginesRepositories as $repository => $url) {
         echo "Load $url {$tag->name}\n";
         $optionsHtml .= '<option value="' . $tag->name . '">' . $tag->name . '</option>';
         $versionDirectory = $directory . DIRECTORY_SEPARATOR . $tag->name;
+        $shortName = substr($tag->name, 0, 6);
         if (needDirectory($versionDirectory) || !file_exists($versionDirectory . '/vendor/autoload.php')) {
             $touched = true;
             chdir($versionDirectory);
             shell_exec('rm -rf ./*');
             echo shell_exec('git clone ' . $gitHost . $url . ' .');
-            $branch = $tag->name === '2.x-dev' ? 'master' : 'tags/' . $tag->name;
+            $branch = $shortName === 'master' ? 'master' : 'tags/' . $tag->name;
             echo shell_exec('git checkout ' . $branch);
             shell_exec('rm -rf tests');
             echo shell_exec('composer install --optimize-autoloader --no-dev --ignore-platform-reqs &');
-        } elseif ($tag->name === '2.x-dev') {
+        } elseif ($shortName === 'master') {
             chdir($versionDirectory);
             echo shell_exec('git pull origin master');
         }
