@@ -6,7 +6,7 @@
         "post-autoload-dump": "php update.php"
     },
     "config": {
-        "process-timout": 10800
+        "process-timeout": 10800
     },
     "extra": {
         "build": "2018-11-01 11:45:00"
