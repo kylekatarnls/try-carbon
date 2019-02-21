@@ -97,3 +97,5 @@ foreach ($enginesRepositories as $repository => $url) {
         file_put_contents($cacheDirectory . DIRECTORY_SEPARATOR . $repository . '-versions-options.html', $optionsHtml);
     }
 }
+
+shell_exec('chmod -R 0555 .');
