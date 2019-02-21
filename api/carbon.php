@@ -6,6 +6,10 @@ if (function_exists('xdebug_disable')) {
 
 ini_set('html_errors', false);
 
+if (is_writeable(__FILE__)) {
+    shell_exec('chmod -R 0555 ..');
+}
+
 header('Content-type: text/plain');
 
 function exception_error_handler($severity, $message, $file, $line) {

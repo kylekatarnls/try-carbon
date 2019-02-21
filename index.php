@@ -12,6 +12,10 @@ $hPadding = isset($_GET['h-padding']) ? $_GET['h-padding'] : 0;
 $outputLeftPadding = isset($_GET['output-left-padding']) ? $_GET['output-left-padding'] : 0;
 $options = $hasOptions ? @json_decode($_GET['options']) : (object) [];
 
+if (is_writeable(__FILE__)) {
+    shell_exec('chmod -R 0555 .');
+}
+
 function getOption($option, $default = null) {
     global $options;
 
