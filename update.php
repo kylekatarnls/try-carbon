@@ -87,16 +87,18 @@ foreach ($enginesRepositories as $repository => $url) {
     }
     foreach ($minorTags as $tag) {
         echo "Load $url {$tag->name}\n";
-        $optionsHtml .= '<option value="' . $tag->name . '">' . $tag->name . '</option>';
-        $versionDirectory = $directory . DIRECTORY_SEPARATOR . $tag->name;
+        $isMaster = (strpos($tag->name, 'master') !== false);
+        $shortName = $isMaster ? 'master' : $tag->name;
+        $optionsHtml .= '<option value="' . $shortName . '">' . $tag->name . '</option>';
+        $versionDirectory = $directory . DIRECTORY_SEPARATOR . $shortName;
         if (needDirectory($versionDirectory) || !file_exists($versionDirectory . '/vendor/autoload.php')) {
             $touched = true;
             $composerJson = [
                 'require' => [
-                    'nesbot/carbon' => strpos($tag->name, 'master') === false ? $tag->name : "dev-master as $devMasterAlias",
+                    'nesbot/carbon' => $isMaster ? "dev-master as $devMasterAlias" : $tag->name,
                 ],
             ];
-            $currentVersion = strpos($tag->name, 'master') === false ? $tag->name : $devMasterAlias;
+            $currentVersion = $isMaster ? $devMasterAlias : $tag->name;
             foreach ($mixins as $name => $versions) {
                 list($min, $max) = array_pad($versions, 2, null);
                 if ($min && version_compare($currentVersion, $min, '<')) {

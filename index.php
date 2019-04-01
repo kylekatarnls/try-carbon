@@ -1,4 +1,5 @@
 <?php
+
 $leftWidth = isset($_GET['width']) ? $_GET['width'] : 70;
 $rightWidth = 100 - $leftWidth;
 $engine = isset($_GET['engine']) ? $_GET['engine'] : 'carbon';
