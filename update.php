@@ -10,6 +10,8 @@ function needDirectory($directory) {
     return false;
 }
 
+$minimumVersion = '1.20';
+
 $enginesDirectory = __DIR__ . '/var/engines';
 needDirectory($enginesDirectory);
 $cacheDirectory = __DIR__ . '/var/cache';
@@ -29,6 +31,12 @@ $apiContext = stream_context_create([
 $enginesRepositories = [
     'carbon' => 'briannesbitt/Carbon',
 ];
+
+$mixins = [
+    'cmixin/business-time',
+];
+
+list($majorMinimum, $minorMinimum) = explode('.', $minimumVersion);
 
 header('Content-type: text/plain; charset=UTF-8');
 
@@ -70,7 +78,7 @@ foreach ($enginesRepositories as $repository => $url) {
     foreach ($tags as $tag) {
         list($major, $minor, $patch) = explode('.', $tag->name . '..');
         $minorTag = "$major.$minor";
-        if (!isset($minorTags[$minorTag])) {
+        if (($major > $majorMinimum || $minor >= $minorMinimum) && !isset($minorTags[$minorTag])) {
             $minorTags[$minorTag] = $tag;
         }
     }
@@ -87,7 +95,7 @@ foreach ($enginesRepositories as $repository => $url) {
             $branch = $shortName === 'master' ? 'master' : 'tags/' . $tag->name;
             echo shell_exec('git checkout ' . $branch);
             shell_exec('rm -rf tests');
-            echo shell_exec('composer install --optimize-autoloader --no-dev --ignore-platform-reqs &');
+            echo shell_exec('composer require --no-update '.implode(' ', $mixins).' && composer install --optimize-autoloader --no-dev --ignore-platform-reqs');
         } elseif ($shortName === 'master') {
             chdir($versionDirectory);
             echo shell_exec('git pull origin master');

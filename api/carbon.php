@@ -31,8 +31,25 @@ if (!file_exists($autoload)) {
 include_once __DIR__ . '/../allow-csrf.php';
 require_once $autoload;
 
+$classes = [
+    'Carbon\Carbon',
+    'Carbon\CarbonInterval',
+    'Carbon\CarbonInterface',
+    'Carbon\CarbonImmutable',
+    'Carbon\CarbonPeriod',
+    'Carbon\CarbonTimeZone',
+    'Carbon\Language',
+    'Carbon\Translator',
+    'Carbon\Factory',
+    'Carbon\FactoryImmutable',
+    'Cmixin\BusinessDay',
+    'Cmixin\BusinessTime',
+];
+
 try {
-    eval('use Carbon\Carbon; use Carbon\CarbonInterval; use Carbon\CarbonInterface; use Carbon\CarbonImmutable; use Carbon\CarbonPeriod; use Carbon\CarbonTimeZone; use Carbon\Translator; use Carbon\Factory; use Carbon\FactoryImmutable;' . $_POST['input']);
+    eval(implode(' ', array_map(function ($className) {
+        return "use $className;";
+    }, $classes)). $_POST['input']);
 } catch (\Throwable $e) {
     $message = trim($e->getMessage());
     echo 'Error' . (substr($message, 0, 1) === '('
