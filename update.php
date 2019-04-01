@@ -108,7 +108,7 @@ foreach ($enginesRepositories as $repository => $url) {
                 $composerJson['require'][$name] = 'dev-master';
             }
             file_put_contents('composer.json', json_encode($composerJson));
-            echo shell_exec('composer install --optimize-autoloader --no-dev --ignore-platform-reqs');
+            echo shell_exec('composer update --optimize-autoloader --no-dev --ignore-platform-reqs')."\n\n";
         }
     }
     if ($touched) {
