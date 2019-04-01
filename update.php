@@ -116,4 +116,4 @@ foreach ($enginesRepositories as $repository => $url) {
     }
 }
 
-shell_exec('chmod -R 0555 .');
+//shell_exec('chmod -R 0555 .');

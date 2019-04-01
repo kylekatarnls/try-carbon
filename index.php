@@ -13,7 +13,7 @@ $outputLeftPadding = isset($_GET['output-left-padding']) ? $_GET['output-left-pa
 $options = $hasOptions ? @json_decode($_GET['options']) : (object) [];
 
 if (is_writeable(__FILE__)) {
-    shell_exec('chmod -R 0555 .');
+    //shell_exec('chmod -R 0555 .');
 }
 
 function getOption($option, $default = null) {
