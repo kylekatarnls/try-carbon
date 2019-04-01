@@ -33,7 +33,8 @@ $enginesRepositories = [
 ];
 
 $mixins = [
-    'cmixin/business-time',
+    'cmixin/business-day' => ['1.26.2', '2.0.0'],
+    'cmixin/business-time' => ['2.0.0'],
 ];
 
 $devMasterAlias = '2.99999.99999';
@@ -106,7 +107,19 @@ foreach ($enginesRepositories as $repository => $url) {
             }
             $composerJson['extra']['branch-alias']['dev-master'] = $devMasterAlias;
             file_put_contents('composer.json', json_encode($composerJson));
-            echo shell_exec('composer require --no-update '.implode(' ', $mixins));
+            $availableMixins = [];
+            $currentVersion = strpos($tag->name, 'master') === false ? $tag->name : $devMasterAlias;
+            foreach ($mixins as $name => $versions) {
+                list($min, $max) = array_pad($versions, 2, null);
+                if ($min && version_compare($currentVersion, $min, '<')) {
+                    continue;
+                }
+                if ($max && version_compare($currentVersion, $max, '>')) {
+                    continue;
+                }
+                $availableMixins[] = $name;
+            }
+            echo shell_exec('composer require --no-update '.implode(' ', $availableMixins));
             echo shell_exec('composer install --optimize-autoloader --no-dev --ignore-platform-reqs');
         } elseif ($shortName === 'master') {
             chdir($versionDirectory);
