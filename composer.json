@@ -1,6 +1,8 @@
 {
     "require": {
-        "php": ">=5.4"
+        "php": ">=5.4",
+        "ext-calendar": "*",
+        "ext-json": "*"
     },
     "scripts": {
         "post-autoload-dump": "php update.php"

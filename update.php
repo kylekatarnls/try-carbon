@@ -95,7 +95,17 @@ foreach ($enginesRepositories as $repository => $url) {
             $branch = $shortName === 'master' ? 'master' : 'tags/' . $tag->name;
             echo shell_exec('git checkout ' . $branch);
             shell_exec('rm -rf tests');
-            echo shell_exec('composer require --no-update '.implode(' ', $mixins).' && composer install --optimize-autoloader --no-dev --ignore-platform-reqs');
+            $composerJson = json_decode(file_get_contents('composer.json'), JSON_OBJECT_AS_ARRAY);
+            if (!isset($composerJson['extra'])) {
+                $composerJson['extra'] = [];
+            }
+            if (!isset($composerJson['extra']['branch-alias'])) {
+                $composerJson['extra']['branch-alias'] = [];
+            }
+            $composerJson['extra']['branch-alias']['dev-master'] = '2.99999.99999';
+            file_put_contents('composer.json', json_encode($composerJson));
+            echo shell_exec('composer require --no-update '.implode(' ', $mixins));
+            echo shell_exec('composer install --optimize-autoloader --no-dev --ignore-platform-reqs');
         } elseif ($shortName === 'master') {
             chdir($versionDirectory);
             echo shell_exec('git pull origin master');
