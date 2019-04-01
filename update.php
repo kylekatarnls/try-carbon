@@ -92,22 +92,11 @@ foreach ($enginesRepositories as $repository => $url) {
         $shortName = substr($tag->name, 0, 6);
         if (needDirectory($versionDirectory) || !file_exists($versionDirectory . '/vendor/autoload.php')) {
             $touched = true;
-            chdir($versionDirectory);
-            shell_exec('rm -rf ./*');
-            echo shell_exec('git clone ' . $gitHost . $url . ' .');
-            $branch = $shortName === 'master' ? 'master' : 'tags/' . $tag->name;
-            echo shell_exec('git checkout ' . $branch);
-            shell_exec('rm -rf tests');
-            $composerJson = json_decode(file_get_contents('composer.json'), JSON_OBJECT_AS_ARRAY);
-            if (!isset($composerJson['extra'])) {
-                $composerJson['extra'] = [];
-            }
-            if (!isset($composerJson['extra']['branch-alias'])) {
-                $composerJson['extra']['branch-alias'] = [];
-            }
-            $composerJson['extra']['branch-alias']['dev-master'] = $devMasterAlias;
-            file_put_contents('composer.json', json_encode($composerJson));
-            $availableMixins = [];
+            $composerJson = [
+                'require' => [
+                    'nesbot/carbon' => strpos($tag->name, 'master') === false ? "dev-master as $devMasterAlias" : $tag->name,
+                ],
+            ];
             $currentVersion = strpos($tag->name, 'master') === false ? $tag->name : $devMasterAlias;
             foreach ($mixins as $name => $versions) {
                 list($min, $max) = array_pad($versions, 2, null);
@@ -117,13 +106,10 @@ foreach ($enginesRepositories as $repository => $url) {
                 if ($max && version_compare($currentVersion, $max, '>')) {
                     continue;
                 }
-                $availableMixins[] = $name;
+                $composerJson['require'][$name] = 'dev-master';
             }
-            echo shell_exec('composer require --no-update '.implode(' ', $availableMixins));
+            file_put_contents('composer.json', json_encode($composerJson));
             echo shell_exec('composer install --optimize-autoloader --no-dev --ignore-platform-reqs');
-        } elseif ($shortName === 'master') {
-            chdir($versionDirectory);
-            echo shell_exec('git pull origin master');
         }
     }
     if ($touched) {
