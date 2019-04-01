@@ -89,12 +89,11 @@ foreach ($enginesRepositories as $repository => $url) {
         echo "Load $url {$tag->name}\n";
         $optionsHtml .= '<option value="' . $tag->name . '">' . $tag->name . '</option>';
         $versionDirectory = $directory . DIRECTORY_SEPARATOR . $tag->name;
-        $shortName = substr($tag->name, 0, 6);
         if (needDirectory($versionDirectory) || !file_exists($versionDirectory . '/vendor/autoload.php')) {
             $touched = true;
             $composerJson = [
                 'require' => [
-                    'nesbot/carbon' => strpos($tag->name, 'master') === false ? "dev-master as $devMasterAlias" : $tag->name,
+                    'nesbot/carbon' => strpos($tag->name, 'master') === false ? $tag->name : "dev-master as $devMasterAlias",
                 ],
             ];
             $currentVersion = strpos($tag->name, 'master') === false ? $tag->name : $devMasterAlias;
