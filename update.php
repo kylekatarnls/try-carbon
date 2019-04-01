@@ -36,6 +36,8 @@ $mixins = [
     'cmixin/business-time',
 ];
 
+$devMasterAlias = '2.99999.99999';
+
 list($majorMinimum, $minorMinimum) = explode('.', $minimumVersion);
 
 header('Content-type: text/plain; charset=UTF-8');
@@ -102,7 +104,7 @@ foreach ($enginesRepositories as $repository => $url) {
             if (!isset($composerJson['extra']['branch-alias'])) {
                 $composerJson['extra']['branch-alias'] = [];
             }
-            $composerJson['extra']['branch-alias']['dev-master'] = '2.99999.99999';
+            $composerJson['extra']['branch-alias']['dev-master'] = $devMasterAlias;
             file_put_contents('composer.json', json_encode($composerJson));
             echo shell_exec('composer require --no-update '.implode(' ', $mixins));
             echo shell_exec('composer install --optimize-autoloader --no-dev --ignore-platform-reqs');
