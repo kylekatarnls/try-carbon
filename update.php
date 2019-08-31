@@ -32,9 +32,10 @@ $enginesRepositories = [
     'carbon' => 'briannesbitt/Carbon',
 ];
 
-$mixins = [
+$addons = [
     'cmixin/business-day' => ['1.26.2', '2.0.0'],
     'cmixin/business-time' => ['2.0.0'],
+    'kylekatarnls/carbonite' => ['2.24.0'],
 ];
 
 $devMasterAlias = '2.99999.99999';
@@ -99,7 +100,7 @@ foreach ($enginesRepositories as $repository => $url) {
                 ],
             ];
             $currentVersion = $isMaster ? $devMasterAlias : $tag->name;
-            foreach ($mixins as $name => $versions) {
+            foreach ($addons as $name => $versions) {
                 list($min, $max) = array_pad($versions, 2, null);
                 if ($min && version_compare($currentVersion, $min, '<')) {
                     continue;
