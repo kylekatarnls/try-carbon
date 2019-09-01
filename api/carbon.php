@@ -44,6 +44,7 @@ $classes = [
     'Carbon\FactoryImmutable',
     'Cmixin\BusinessDay',
     'Cmixin\BusinessTime',
+    'Carbon\Carbonite',
 ];
 
 try {
