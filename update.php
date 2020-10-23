@@ -10,7 +10,7 @@ function needDirectory($directory) {
     return false;
 }
 
-$minimumVersion = '1.20';
+$minimumVersion = '2.30.0';
 
 $enginesDirectory = __DIR__ . '/var/engines';
 needDirectory($enginesDirectory);
@@ -43,6 +43,33 @@ $devMasterAlias = '2.99999.99999';
 list($majorMinimum, $minorMinimum) = explode('.', $minimumVersion);
 
 header('Content-type: text/plain; charset=UTF-8');
+
+function isAvailable($major, $minor, $patch, &$minorTag)
+{
+    global $majorMinimum, $minorMinimum;
+
+    if ($major === '1') {
+        if ($major === '1' && $minor === '26') {
+            if ($patch === '3') {
+                return true;
+            }
+
+            $minorTag .= '-last';
+
+            return true;
+        }
+
+        $minorTag = '1-last';
+
+        return true;
+    }
+
+    if ($major === '2' && $minor === '0' && $patch === '0') {
+        return true;
+    }
+
+    return $major > $majorMinimum || $minor >= $minorMinimum;
+}
 
 foreach ($enginesRepositories as $repository => $url) {
     $optionsHtml = '';
@@ -82,7 +109,7 @@ foreach ($enginesRepositories as $repository => $url) {
     foreach ($tags as $tag) {
         list($major, $minor, $patch) = explode('.', $tag->name . '..');
         $minorTag = "$major.$minor";
-        if (($major > $majorMinimum || $minor >= $minorMinimum) && !isset($minorTags[$minorTag])) {
+        if (isAvailable($major, $minor, $patch, $minorTag)  && !isset($minorTags[$minorTag])) {
             $minorTags[$minorTag] = $tag;
         }
     }
