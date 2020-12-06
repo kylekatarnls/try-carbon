@@ -154,7 +154,7 @@ foreach ($enginesRepositories as $repository => $url) {
                     continue;
                 }
 
-                $composerJson['require'][$name] = '2.x-dev';
+                $composerJson['require'][$name] = '*';
             }
 
             file_put_contents($versionDirectory.'/composer.json', json_encode($composerJson));
