@@ -17,7 +17,8 @@ function exception_error_handler($severity, $message, $file, $line) {
 }
 set_error_handler('exception_error_handler');
 
-$autoload = __DIR__ . '/../var/engines/carbon/' . $_POST['version'] . '/vendor/autoload.php';
+$version = $_POST['version'] === 'master' ? '2.x-dev' : $_POST['version'];
+$autoload = __DIR__ . '/../var/engines/carbon/' . $version . '/vendor/autoload.php';
 
 if (!file_exists($autoload)) {
     echo 'Update in progress, please retry in few minutes.';
