@@ -6,7 +6,7 @@ function needDirectory($directory) {
     if (!file_exists($directory)) {
         return mkdir($directory, 0777, true);
     }
-    
+
     return false;
 }
 
@@ -35,6 +35,7 @@ $enginesRepositories = [
 $addons = [
     'cmixin/business-day' => ['1.26.2', '2.0.0'],
     'cmixin/business-time' => ['2.0.0'],
+    'cmixin/enhanced-period' => ['2.24.0'],
     'kylekatarnls/carbonite' => ['2.24.0'],
 ];
 
