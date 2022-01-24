@@ -51,7 +51,7 @@ $classes = [
 try {
     eval(implode(' ', array_map(function ($className) {
         return "use $className;";
-    }, $classes)). $_POST['input']);
+    }, $classes)) . $_POST['input']);
 } catch (\Throwable $e) {
     $message = trim($e->getMessage());
     echo 'Error' . (substr($message, 0, 1) === '('
