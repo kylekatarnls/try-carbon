@@ -49,14 +49,19 @@ $classes = [
 ];
 
 try {
-    eval(implode(' ', array_map(function ($className) {
-        return "use $className;";
-    }, $classes)) . $_POST['input']);
+    eval(implode(' ', array_map(
+        static fn (string $className) => "use $className;",
+        $classes,
+    )) . $_POST['input']);
 } catch (\Throwable $e) {
-    $message = trim((string) $e->getMessage());
+    $message = trim($e->getMessage());
+
     echo 'Error' . (substr($message, 0, 1) === '('
         ? preg_replace('/^\((\d+)\)(\s*:)?/', ' line $1:', $message)
         : ': ' . $message
-    ) . "\n" . $e->getFile() . ':' . $e->getLine()
+    ) . (str_ends_with($e->getFile(), "eval()'d code")
+        ? "\nline " . $e->getLine() . "\n"
+        : ''
+    ) ."\n" . $e->getFile() . ':' . $e->getLine()
     . "\n" . $e->getTraceAsString();
 }
