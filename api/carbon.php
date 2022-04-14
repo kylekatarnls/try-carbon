@@ -53,7 +53,7 @@ try {
         return "use $className;";
     }, $classes)) . $_POST['input']);
 } catch (\Throwable $e) {
-    $message = trim($e->getMessage());
+    $message = trim((string) $e->getMessage());
     echo 'Error' . (substr($message, 0, 1) === '('
         ? preg_replace('/^\((\d+)\)(\s*:)?/', ' line $1:', $message)
         : ': ' . $message
