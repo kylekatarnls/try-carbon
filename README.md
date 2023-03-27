@@ -1,5 +1,6 @@
 # try-carbon
 
-Live demo of Carbon
+This repository allow you to create a Carbon sandbox (self-hosted).
 
-https://try-carbon.herokuapp.com/
+Carbon official documentation no longer use it, it now relies on:
+https://play.phpsandbox.io/embed/nesbot/carbon
